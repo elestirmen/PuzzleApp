@@ -1,0 +1,24 @@
+/* ===== Puzzle Parça Stilleri ===== */
+.puzzle-piece {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    border: 1px solid rgba(255,255,255,0.1);
+    touch-action: manipulation;
+    box-sizing: border-box;
+}
+
+.puzzle-piece.selected {
+    border-color: #6366f1;
+    box-shadow: inset 0 0 10px rgba(99, 102, 241, 0.7);
+    transform: scale(0.96);
+    z-index: 5;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .puzzle-piece {
+        border-width: 1px;
+    }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "tr.edu.kapadokya.puzzleapp",
+  "displayName": "ErtugrulsPuzzle",
+  "version": "1.0.0",
+  "description": "Mobile image puzzle game built with Apache Cordova.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/puzzle-logic.test.js"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "PuzzleApp Team",
+  "license": "Apache-2.0",
+  "overrides": {
+    "lodash": "4.17.23"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ]
+  },
+  "devDependencies": {
+    "cordova-android": "^14.0.1"
+  }
+}

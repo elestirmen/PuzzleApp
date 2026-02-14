@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Puzzle Studio | Tasarımcı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .app-bar {
+            padding: 20px;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .designer-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Modern File Upload */
+        .upload-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+            transition: 0.3s;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-zone:active {
+            transform: scale(0.98);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Grid Controls */
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-box label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .input-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            outline: none;
+            width: 100%;
+        }
+
+        /* Preset Chips */
+        .presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .chip.active {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+
+        /* Preview Canvas */
+        .canvas-wrapper {
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            margin-top: 20px;
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            display: block;
+        }
+
+        .btn-generate {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-download {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .bottom-nav {
+            background: var(--card-bg);
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            bottom: 0;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-bar">
+        <button class="back-btn" onclick="window.location.href='index.html'">⬅</button>
+        <div style="font-weight: 700; font-size: 1.2rem;">Puzzle Studio</div>
+    </div>
+
+    <div class="container">
+        <div class="designer-card">
+            <div class="section-title"><span>🎨</span> Deseni Tasarla</div>
+
+            <div class="upload-zone" onclick="document.getElementById('image-loader').click()">
+                <span class="upload-icon">🖼️</span>
+                <div style="font-weight: 600;">Resim Değiştir</div>
+                <div id="file-info" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Henüz yeni
+                    dosya seçilmedi</div>
+                <input type="file" id="image-loader" accept="image/*" class="hidden">
+            </div>
+
+            <div class="grid-inputs">
+                <div class="input-box">
+                    <label>SATIR SAYISI</label>
+                    <input type="number" id="rows-input" value="5" min="2" max="20">
+                </div>
+                <div class="input-box">
+                    <label>SÜTUN SAYISI</label>
+                    <input type="number" id="cols-input" value="5" min="2" max="20">
+                </div>
+            </div>
+
+            <div class="grid-inputs">
+                <div class="input-box">
+                    <label>TOPUZ DERİNLİĞİ</label>
+                    <input type="number" id="knob-depth-input" value="0.22" min="0.05" max="0.4" step="0.01">
+                </div>
+                <div class="input-box">
+                    <label>DÜZ KISIM ORANI</label>
+                    <input type="number" id="flat-ratio-input" value="0.33" min="0.05" max="0.45" step="0.01">
+                </div>
+            </div>
+
+            <div class="grid-inputs">
+                <div class="input-box">
+                    <label>EĞRİLİK MİKTARI</label>
+                    <input type="number" id="curve-swell-input" value="0.1" min="0" max="0.5" step="0.01">
+                </div>
+                <div class="input-box" style="visibility:hidden;"></div>
+            </div>
+
+            <div class="presets">
+                <div class="chip" onclick="applyPreset(3,3,this)">🐣 3x3</div>
+                <div class="chip active" onclick="applyPreset(5,5,this)">😎 5x5</div>
+                <div class="chip" onclick="applyPreset(8,8,this)">🔥 8x8</div>
+                <div class="chip" onclick="applyPreset(12,12,this)">🏆 12x12</div>
+            </div>
+
+            <button id="generate-button" class="btn-generate">DESENİ OLUŞTUR</button>
+
+            <div id="puzzle-stats" class="hidden"
+                style="display:none; background:rgba(255,255,255,0.03); border-radius:12px; padding:12px 20px; margin-top:15px; text-align:center; font-size:0.9rem; color:var(--text-muted);">
+                🧩 Toplam Parça: <span id="total-pieces" style="font-weight:700; color:var(--text);">0</span>
+                &nbsp;|&nbsp; 📐 Varyasyon: <span id="knob-variety" style="font-weight:700; color:var(--text);">-</span>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="canvas" class="hidden"></canvas>
+                <div id="drop-placeholder">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Desen burada görünecek</p>
+                </div>
+            </div>
+
+            <button id="download-button" class="btn-download hidden">⬇️ Resmi Galeriye Kaydet</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-icon">🎮</span>
+            <span>Oyna</span>
+        </a>
+        <a href="slicer.html" class="nav-item active">
+            <span class="nav-icon">🎨</span>
+            <span>Tasarla</span>
+        </a>
+    </nav>
+
+    <script>
+        function applyPreset(r, c, el) {
+            document.getElementById('rows-input').value = r;
+            document.getElementById('cols-input').value = c;
+            document.querySelectorAll('.chip').forEach(ch => ch.classList.remove('active'));
+            el.classList.add('active');
+        }
+    </script>
+    <script src="slicer.js"></script>
+</body>
+
+</html>

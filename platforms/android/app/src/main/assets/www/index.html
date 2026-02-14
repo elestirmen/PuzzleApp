@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Puzzle Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="puzzle.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --accent: #f59e0b;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .app-bar {
+            padding: 20px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .hero-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Gallery/Default Image Section */
+        .default-images {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .img-card {
+            min-width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .img-card.active {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+        }
+
+        .img-card span {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            font-size: 0.6rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .file-drop-area {
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .diff-option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .diff-option.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-play {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        #puzzle-container {
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            background: #000;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .bottom-nav {
+            background: var(--card-bg);
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            bottom: 0;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-bar">
+        <div class="logo">Puzzle Master</div>
+        <div style="font-size: 0.8rem; color: var(--accent);">🏆 Pro</div>
+    </div>
+
+    <div class="container">
+        <div id="setup-screen" class="hero-card">
+            <div class="section-title"><span>🌟</span> Hızlı Başlat (Varsayılan Resimler)</div>
+            <div class="default-images">
+                <!-- Buradaki resimler assets/www/img/ içinde olmalı -->
+                <div class="img-card active" style="background-image: url('img/logo.png');"
+                    onclick="setDefaultImage('img/logo.png', this)">
+                    <span>Puzzle 1</span>
+                </div>
+                <div class="img-card"
+                    style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=200');"
+                    onclick="setDefaultImage('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800', this)">
+                    <span>Doğa</span>
+                </div>
+                <div class="img-card"
+                    style="background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200');"
+                    onclick="setDefaultImage('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800', this)">
+                    <span>Uzay</span>
+                </div>
+            </div>
+
+            <div class="section-title"><span>📁</span> Kendi Resmini Seç</div>
+            <div class="file-drop-area" onclick="document.getElementById('image-loader').click()">
+                <div style="font-size: 0.9rem;">Galeriden bir resim yükle</div>
+                <input type="file" id="image-loader" accept="image/*" class="hidden">
+            </div>
+
+            <div class="section-title"><span>⚙️</span> Zorluk</div>
+            <div class="difficulty-grid">
+                <div class="diff-option" onclick="setDiff(3, this)">🐣 3x3</div>
+                <div class="diff-option active" onclick="setDiff(4, this)">😎 4x4</div>
+                <div class="diff-option" onclick="setDiff(5, this)">🔥 5x5</div>
+                <div class="diff-option" onclick="setDiff(6, this)">🏆 6x6</div>
+            </div>
+            <input type="hidden" id="difficulty" value="4">
+
+            <button id="start-button" class="btn-play">OYUNA BAŞLA</button>
+        </div>
+
+        <div id="game-screen" class="hidden">
+            <div class="stats-row">
+                <span>⏱️ <span id="timer">00:00</span></span>
+                <span>Moves: <span id="move-count">0</span></span>
+            </div>
+            <div id="puzzle-container"></div>
+            <button onclick="location.reload()" class="btn-play"
+                style="background: var(--card-bg); margin-top: 20px;">🔄 Ana Menü</button>
+        </div>
+
+        <div id="win-message" class="hero-card hidden"
+            style="text-align: center; background: linear-gradient(135deg, #059669, #10b981);">
+            <h2 style="margin:0">TEBRİKLER! 🎉</h2>
+            <button onclick="location.reload()" class="btn-play" style="background: white; color: #059669;">YENİ
+                OYUN</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active"><span>🎮</span><span>Oyna</span></a>
+        <a href="slicer.html" class="nav-item"><span>🎨</span><span>Tasarla</span></a>
+    </nav>
+
+    <script>
+        // Global resim kaynağı
+        window.imageSrc = 'img/logo.png';
+
+        function setDefaultImage(src, el) {
+            window.imageSrc = src;
+            document.querySelectorAll('.img-card').forEach(card => card.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function setDiff(val, el) {
+            document.getElementById('difficulty').value = val;
+            document.querySelectorAll('.diff-option').forEach(opt => opt.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        document.getElementById('image-loader').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    window.imageSrc = event.target.result;
+                    // Seçilen kartı temizle
+                    document.querySelectorAll('.img-card').forEach(card => card.classList.remove('active'));
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    <script src="cordova.js"></script>
+    <script src="puzzle-logic.js"></script>
+    <script src="puzzle.js"></script>
+</body>
+
+</html>
