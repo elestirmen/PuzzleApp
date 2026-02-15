@@ -6,7 +6,9 @@ node_modules/
 npm-debug.log
 
 # Cordova
-/platforms/
+/platforms/*
+!/platforms/android/
+!/platforms/android/**
 /plugins/
 /www/plugins/
 /www/cordova.js
@@ -32,6 +34,8 @@ dist/
 *.aab
 *.ipa
 .tools/
+.gradle/
+local.properties
 
 # Keys and Secrets
 *.keystore
