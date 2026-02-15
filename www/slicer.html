@@ -343,6 +343,121 @@
             transform: scale(0.93);
         }
 
+        .chip .chip-delete {
+            display: inline-block;
+            margin-left: 6px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .chip .chip-delete:hover {
+            color: #f87171;
+        }
+
+        .presets-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .presets-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-save-preset {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.08));
+            color: var(--accent);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .btn-save-preset:active {
+            transform: scale(0.93);
+        }
+
+        .custom-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .chip.custom {
+            background: rgba(251, 191, 36, 0.08);
+            border-color: rgba(251, 191, 36, 0.2);
+            color: var(--accent);
+        }
+
+        .chip.custom.active {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.12));
+            border-color: var(--accent);
+            box-shadow: 0 0 16px rgba(251, 191, 36, 0.2);
+        }
+
+        .btn-toggle-settings {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-toggle-settings:active {
+            transform: scale(0.98);
+        }
+
+        .btn-toggle-settings .toggle-arrow {
+            transition: transform 0.3s;
+        }
+
+        .btn-toggle-settings.open .toggle-arrow {
+            transform: rotate(180deg);
+        }
+
+        .advanced-settings {
+            display: none;
+            margin-bottom: 12px;
+        }
+
+        .advanced-settings.open {
+            display: block;
+            animation: fadeSlideIn 0.3s ease;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* ===== Generate Button ===== */
         .btn-generate {
             width: 100%;
@@ -567,25 +682,81 @@
                     <label>Sütun Sayısı</label>
                     <input type="number" id="cols-input" value="5" min="2" max="20">
                 </div>
-                <div class="control-box">
-                    <label>Topuz Derinliği</label>
-                    <input type="number" id="knob-depth-input" value="0.22" min="0.05" max="0.4" step="0.01">
-                </div>
-                <div class="control-box">
-                    <label>Düz Kısım Oranı</label>
-                    <input type="number" id="flat-ratio-input" value="0.33" min="0.05" max="0.45" step="0.01">
-                </div>
-                <div class="control-box">
-                    <label>Eğrilik Miktarı</label>
-                    <input type="number" id="curve-swell-input" value="0.1" min="0" max="0.5" step="0.01">
+                <div class="control-box full-width">
+                    <label>Parçalama Stratejisi</label>
+                    <select id="strategy-select"
+                        style="background: transparent; border: none; color: white; font-family: inherit; font-size: 1.1rem; font-weight: 700; outline: none; width: 100%; cursor: pointer;">
+                        <optgroup label="── Temel ──" style="background: #1a1a2e; color: #94a3b8;">
+                            <option value="standart" style="background: #1a1a2e; color: white;" selected>📐 Standart
+                            </option>
+                            <option value="educa" style="background: #1a1a2e; color: white;">🧩 Educa (Çok Çeşitli)
+                            </option>
+                        </optgroup>
+                        <optgroup label="── Sektör Stratejileri ──" style="background: #1a1a2e; color: #94a3b8;">
+                            <option value="ribbon" style="background: #1a1a2e; color: white;">📐 Ribbon Cut (Klasik
+                                Grid)</option>
+                            <option value="random" style="background: #1a1a2e; color: white;">🎲 Random Cut (Serbest)
+                            </option>
+                            <option value="ravensburger" style="background: #1a1a2e; color: white;">🔵 Ravensburger
+                                (Softclick)</option>
+                            <option value="victorian" style="background: #1a1a2e; color: white;">🏛️ Victorian (El
+                                Yapımı)</option>
+                            <option value="strip" style="background: #1a1a2e; color: white;">👶 Strip Cut (Çocuk)
+                            </option>
+                            <option value="flow" style="background: #1a1a2e; color: white;">🌊 Flow Cut (Sanatsal)
+                            </option>
+                            <option value="laser" style="background: #1a1a2e; color: white;">⚡ Laser Cut (Hassas)
+                            </option>
+                        </optgroup>
+                    </select>
                 </div>
             </div>
 
+            <div class="presets-header">
+                <span class="presets-label">Boyut Presetleri</span>
+            </div>
             <div class="presets">
                 <div class="chip" onclick="applyPreset(3,3,this)">🐣 3×3</div>
                 <div class="chip active" onclick="applyPreset(5,5,this)">😎 5×5</div>
                 <div class="chip" onclick="applyPreset(8,8,this)">🔥 8×8</div>
                 <div class="chip" onclick="applyPreset(12,12,this)">🏆 12×12</div>
+            </div>
+
+            <button class="btn-toggle-settings" id="toggle-settings-btn">
+                <span>🔧 Detaylı Ayarlar</span>
+                <span class="toggle-arrow">▼</span>
+            </button>
+            <div class="advanced-settings" id="advanced-settings">
+                <div class="controls-grid">
+                    <div class="control-box">
+                        <label>Topuz Derinliği</label>
+                        <input type="number" id="knob-depth-input" value="0.22" min="0.05" max="0.4" step="0.01">
+                    </div>
+                    <div class="control-box">
+                        <label>Düz Kısım Oranı</label>
+                        <input type="number" id="flat-ratio-input" value="0.33" min="0.05" max="0.45" step="0.01">
+                    </div>
+                    <div class="control-box">
+                        <label>Eğrilik Miktarı</label>
+                        <input type="number" id="curve-swell-input" value="0.1" min="0" max="0.5" step="0.01">
+                    </div>
+                    <div class="control-box">
+                        <label>Organik Yumuşaklık</label>
+                        <input type="number" id="organic-input" value="0.015" min="0" max="0.08" step="0.005">
+                    </div>
+                    <div class="control-box">
+                        <label>Topuz Genişliği</label>
+                        <input type="number" id="knob-width-input" value="1.0" min="0.5" max="2.0" step="0.1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="presets-header">
+                <span class="presets-label">Kayıtlı Ayarlarım</span>
+                <button class="btn-save-preset" id="save-preset-btn">💾 Kaydet</button>
+            </div>
+            <div class="custom-presets" id="custom-presets-container">
+                <span style="font-size:0.75rem; color:var(--text-dim);">Henüz kayıtlı ayar yok</span>
             </div>
 
             <button id="generate-button" class="btn-generate">✨ DESENİ OLUŞTUR</button>
@@ -606,7 +777,10 @@
                     <p class="placeholder-text">Desen burada görünecek</p>
                 </div>
             </div>
-            <button id="download-button" class="btn-download hidden">⬇️ Resmi Galeriye Kaydet</button>
+            <button id="download-button" class="btn-download hidden">⬇️ Tam Resmi Kaydet</button>
+            <button id="download-pieces-button" class="btn-download btn-download-pieces hidden"
+                style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.08)); color: #fbbf24; border-color: rgba(251, 191, 36, 0.25);">🧩
+                Parçaları Ayrı Ayrı Kaydet</button>
         </div>
     </div>
 
