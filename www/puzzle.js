@@ -24,7 +24,6 @@ function initApp() {
     const isSolvedOrder = typeof puzzleLogic.isSolvedOrder === 'function' ? puzzleLogic.isSolvedOrder : (order) => order.every((v, i) => v === i);
     const calculateBoardSize = typeof puzzleLogic.calculateBoardSize === 'function' ? puzzleLogic.calculateBoardSize : (w, h) => Math.min(w - 40, h - 300, 500);
 
-    // VARSAYILAN RESİM: HTML'deki window.imageSrc değerini kullan (img/logo.png)
     let imageSrc = window.imageSrc || 'img/logo.png';
     let gridSize = 4;
     let firstClickedPiece = null;
@@ -55,19 +54,26 @@ function initApp() {
         timerDisplay.textContent = `${mins}:${secs}`;
     }
 
+    function formatTime(totalSeconds) {
+        const mins = Math.floor(totalSeconds / 60);
+        const secs = totalSeconds % 60;
+        if (mins > 0) return `${mins}dk ${secs}sn`;
+        return `${secs}sn`;
+    }
+
     imageLoader.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = (e) => {
             imageSrc = e.target.result;
-            window.imageSrc = imageSrc; // Globali de güncelle
+            window.imageSrc = imageSrc;
         };
         reader.readAsDataURL(file);
     });
 
     startButton.addEventListener('click', () => {
-        // HTML'den güncel imageSrc ve difficulty al
+        if (typeof SFX !== 'undefined') SFX.click();
         imageSrc = window.imageSrc;
         gridSize = parseInt(difficultySelect.value, 10);
 
@@ -79,7 +85,6 @@ function initApp() {
         moveCount = 0;
         moveDisplay.textContent = '0';
 
-        // UI Geçişi
         setupScreen.classList.add('hidden');
         gameScreen.classList.remove('hidden');
         winMessage.classList.add('hidden');
@@ -128,12 +133,15 @@ function initApp() {
         if (!winMessage.classList.contains('hidden')) return;
 
         if (firstClickedPiece === null) {
+            if (typeof SFX !== 'undefined') SFX.tap();
             this.classList.add('selected');
             firstClickedPiece = this;
         } else if (firstClickedPiece === this) {
+            if (typeof SFX !== 'undefined') SFX.cancel();
             this.classList.remove('selected');
             firstClickedPiece = null;
         } else {
+            if (typeof SFX !== 'undefined') SFX.swap();
             swapPieces(firstClickedPiece, this);
             firstClickedPiece.classList.remove('selected');
             firstClickedPiece = null;
@@ -166,8 +174,8 @@ function initApp() {
         p2.style.transform = `translate(${r2.left - nr2.left}px, ${r2.top - nr2.top}px)`;
 
         requestAnimationFrame(() => {
-            p1.style.transition = 'transform 0.2s ease-out';
-            p2.style.transition = 'transform 0.2s ease-out';
+            p1.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            p2.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             p1.style.transform = 'translate(0,0)';
             p2.style.transform = 'translate(0,0)';
         });
@@ -178,7 +186,21 @@ function initApp() {
         const currentOrder = pieces.map(p => parseInt(p.dataset.index));
         if (isSolvedOrder(currentOrder)) {
             stopTimer();
+
+            // Update win stats
+            const winTimeEl = document.getElementById('win-time');
+            const winMovesEl = document.getElementById('win-moves');
+            if (winTimeEl) winTimeEl.textContent = formatTime(timerSeconds);
+            if (winMovesEl) winMovesEl.textContent = moveCount;
+
+            gameScreen.classList.add('hidden');
             winMessage.classList.remove('hidden');
+
+            // Confetti + win sound!
+            if (typeof SFX !== 'undefined') SFX.win();
+            if (typeof window.showConfetti === 'function') {
+                window.showConfetti();
+            }
         }
     }
 }

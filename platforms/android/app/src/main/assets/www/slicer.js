@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     imageLoader.addEventListener('change', (e) => {
+        if (typeof SFX !== 'undefined') SFX.click();
         if (e.target.files[0]) handleFileUpload(e.target.files[0]);
     });
 
@@ -344,12 +345,15 @@ document.addEventListener('DOMContentLoaded', () => {
         displayBasicStatistics(rows, cols);
 
         downloadButton.classList.remove('hidden');
+
+        if (typeof SFX !== 'undefined') SFX.success();
     });
 
     // ==================================================
     // DOWNLOAD
     // ==================================================
     downloadButton.addEventListener('click', () => {
+        if (typeof SFX !== 'undefined') SFX.click();
         const link = document.createElement('a');
         link.download = 'puzzle-deseni.png';
         link.href = canvas.toDataURL();
@@ -362,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const presetButtons = document.querySelectorAll('.chip');
     presetButtons.forEach(button => {
         button.addEventListener('click', () => {
+            if (typeof SFX !== 'undefined') SFX.tap();
             // Clear active state handled by inline onclick applyPreset
             // Auto-generate if image is loaded
             if (imageLoaded) {
