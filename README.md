@@ -1,34 +1,49 @@
-# PuzzleApp
+# ErtugrulsPuzzle (PuzzleApp)
 
-PuzzleApp, Apache Cordova ile gelistirilmis Android odakli bir mobil yapboz oyunudur.
+Cordova ile yazilmis, Android odakli bir yapboz oyunu. Bir yandan oynarsin, bir yandan da "Puzzle Studio" ile kendi yapboz desenini uretirsin.
 
-Kisa ozet: resmini sec, parcala, karistir, rekorunu kir.
+Kural basit: resmi sec, parcala, karistir, sureyi yen.
 
-## Neler Var?
+```
+   __  __
+  / /_/ /_  _  __
+ / __  / / / / / /
+/_/ /_/_/ /_/ /_/
+```
 
-- Hazir gorsel secimi ve galeriden ozel resim yukleme
-- 3x3, 4x4, 5x5, 6x6 zorluk seviyeleri
-- Hamle sayaci ve sure takibi
-- Kazaninca kutlama animasyonu ve ses efektleri
-- `slicer.html` uzerinden Puzzle Studio ekrani (parcalama stratejileri + onizleme)
-- `platforms/android` kaynaklari repoda takip edilir
+## Oyun Modu (Play)
+
+- Hazir gorseller + galeriden resim yukleme
+- Zorluk: 3x3, 4x4, 5x5, 6x6
+- Oynanis: iki parcaya tikla, yer degistirsin
+- Hamle sayaci + sure + kazaninca konfeti ve "win" sesi
+
+## Puzzle Studio (Design)
+
+`www/slicer.html` uzerinden calisir.
+
+- Satir/sutun sayisi ile parcala
+- Stratejiler: `standart`, `educa`, `ribbon`, `random`, `ravensburger`, `victorian`, `strip`, `flow`, `laser`
+- Detayli ayarlar: knob derinligi, duz oran, egrilik, organiklik, knob genisligi
+- Hazir presetler + localStorage uzerinden kaydet/geri cagir
+- Cikti: tam resmi kaydet veya parcalari tek tek PNG olarak indir
 
 ## Teknoloji
 
 - Apache Cordova
-- Cordova Android `14.x`
+- cordova-android `14.x`
 - Vanilla JavaScript, HTML, CSS
-- Node test runner (`node --test`)
+- Ses: Web Audio API (harici ses dosyasi yok)
+- Test: Node test runner (`node --test`)
 
 ## Hizli Baslangic
 
 Gereksinimler:
 
 - Node.js 20+
-- npm
 - Java 17+
 - Android SDK
-- Cordova CLI (`npm i -g cordova`)
+- Cordova CLI: `npm i -g cordova`
 
 Kurulum ve test:
 
@@ -37,14 +52,14 @@ npm install
 npm test
 ```
 
-Android icin calistirma:
+Android'de calistirma (emulator veya cihaz):
 
 ```bash
-npx cordova prepare android
-npx cordova run android
+cordova prepare android
+cordova run android
 ```
 
-Alternatif olarak, Android debug APK derlemek icin:
+Debug APK derleme (platform klasorunden):
 
 ```bash
 cd platforms/android
@@ -60,18 +75,24 @@ cd platforms/android
 
 ## Proje Yapisi
 
-- `www/`: Oyunun web arayuzu ve ana mantik
-- `www/puzzle.js`: Oyun akisi (hamle, timer, kazanma kontrolu)
-- `www/puzzle-logic.js`: Test edilen saf mantik fonksiyonlari
-- `www/slicer.js`: Puzzle Studio parcalama/uretme akisi
-- `platforms/android/`: Android platform kaynaklari
-- `test/puzzle-logic.test.js`: Birim testleri
+- `www/`: Oyunun arayuzu ve ana kod
+- `www/puzzle.js`: oyun akisi (hamle, timer, kazanma kontrolu)
+- `www/puzzle-logic.js`: saf mantik (test ediliyor)
+- `www/slicer.js`: Puzzle Studio uretim akisi
+- `platforms/android/`: Android platform kaynaklari (bu repoda bilerek takip ediliyor)
+- `test/puzzle-logic.test.js`: birim testleri
 
-## Gelistirme Notlari
+## Repo Notlari
 
-- Mobilde Cordova ile calisir, tarayicida da temel UI denenebilir.
-- Buyuk lokal arac dosyalari (`.tools/`) git disinda tutulur.
-- Android build/cache dosyalari `platforms/android/.gitignore` ile dislanir.
+- `.tools/` git disinda (buyuk arac/artifact birikmesin diye).
+- Android build/cache dosyalari `platforms/android/.gitignore` ile dislanir (`.gradle`, `*/build`, `local.properties`).
+- Imza anahtarlari/keystore dosyalarini repoya koyma.
+
+## Sorun Giderme (Kisa)
+
+- Hazir gorsellerden ikisi internet ister (Unsplash). Offline isen galeriden resim yukle.
+- `cordova` bulunamazsa: `npm i -g cordova`
+- Android SDK/JDK bulunamazsa: `JAVA_HOME` ve Android SDK path ayarlarini kontrol et.
 
 ## Lisans
 
